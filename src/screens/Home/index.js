@@ -1,39 +1,57 @@
-
 import { StyleSheet, Text, View ,FlatList} from 'react-native';
 import BannerMovies from '../../components/bannerFilmes';
 import CardMovies from '../../components/cardMovies';
 import Header from '../../components/header';
 import SearchBar from '../../components/searchbar';
-import Filmes from '../../data/movies'
+import Filmes from '../../data/movies';
+import { useState, useEffect } from 'react';
 
-export default function App() {
+export default function HomeIndex() {
+  const [movies, setFilmes] = useState();
+
+  useEffect(() => {
+    async function buscarFilmes() {
+      try {
+        const response = await fetch('https://api.themoviedb.org/3/movie/11?api_key=129b61ed5e4608a1f838c3cdde9b3c74&language=pt-BR&page=1');
+        const data = await response.json();
+        setFilmes(data.results)
+      } catch (error) {
+        console.log('Erro ao Buscar Filmes', error)
+      }
+    };
+    buscarFilmes();
+
+  }, [])
+
+
+
   return (
     <View style={styles.container}>
-     <Header></Header>
+      <Header></Header>
 
-     <SearchBar></SearchBar>
+      <SearchBar></SearchBar>
 
-     <BannerMovies></BannerMovies>
-     
-    
-     <View style = {{width :"90%"}}>
-          <FlatList
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            data={Filmes}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              
-              <CardMovies
-                titulo={item.nome}
-                imagem={item.imagem}
-                nota={item.nota}
-              />
-            )}
-          />
-        </View>
-    
-  
+      <BannerMovies></BannerMovies>
+
+
+      <View style={{ width: "90%" }}>
+        <FlatList
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          data={movies}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+
+            <CardMovies
+              titulo={item.title}
+              imagem={item.poster_path}
+              nota={item.vote_average}
+            />
+          )}
+        />
+      </View>
+
+
 
     </View>
 
@@ -42,10 +60,10 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     backgroundColor: '#141a29',
-    alignItems:'center'
-    
-    
+    alignItems: 'center'
+
+
   },
 });
