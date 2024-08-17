@@ -12,7 +12,7 @@ export default function HomeIndex() {
   useEffect(() => {
     async function buscarFilmes() {
       try {
-        const response = await fetch('https://api.themoviedb.org/3/movie/11?api_key=129b61ed5e4608a1f838c3cdde9b3c74&language=pt-BR&page=1');
+        const response = await fetch('https://api.themoviedb.org/3/movie/now_playing?api_key=129b61ed5e4608a1f838c3cdde9b3c74&language=pt-BR&page=13');
         const data = await response.json();
         setFilmes(data.results)
       } catch (error) {
